@@ -1,4 +1,4 @@
-The codes are in the "demos/simple" folder.
+The codes are in the "AgentMaps-gh-pages/demos/simple" folder.
 
 The main code is in the file "simple.js". 
 The file "map_data.js" provides the input for the main code. 
