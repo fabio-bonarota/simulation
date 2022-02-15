@@ -37,12 +37,33 @@ agentmap.controller = function() {
 	}
 }
 
+
+
 function setup() {
 	//Generate and display streets and buildings on the map (map_data is defined in map_data.js).
 	agentmap.buildingify(bounding_box, map_data);
 
+	var buildings = agentmap.units.getLayers()
+
+	// differentiate buildings (numbers are random)
+	var factories = pick_random_n(buildings,10);
+	for (let i = 0; i < 10; i++) {
+		factories[i].setStyle({color: "black"});
+	}
+
+	var apartments = pick_random_n(buildings.filter(x => !factories.includes(x)),20);
+	for (let i = 0; i < 20; i++) {
+		apartments[i].setStyle({color: "red"});
+	}
+
 	//Generate 100 agents according to the rules of epidemicAgentMaker, displaying them as blue, .5 meter radius circles.
 	agentmap.agentify(30, agentmap.seqUnitAgentMaker);
+
+	var humans = agentmap.agents.getLayers();
+		for (let i = 0; i < 15; i++) {
+			humans[i].setStyle({color: "black"});
+		}
+		humans[20].setStyle({color: "green"});
 
 	ticks_display.textContent = agentmap.state.ticks;
 
@@ -57,13 +78,12 @@ function setup() {
 		unit_id = random_unit._leaflet_id,
 		unit_center = random_unit.getCenter();
 
-		agent.scheduleTrip(unit_center, {type: "unit", id: unit_id}, 1);
+		agent.scheduleTrip(unit_center, {type: "unit", id: unit_id}, .5);
 /*
 		//Find and move to a random, unanchored point in the neighborhood.
 		var random_lat = bounding_box[0][0] + Math.random() * -(bounding_box[0][0] - bounding_box[1][0]),
 		random_lng = bounding_box[0][1] + Math.random() * -(bounding_box[0][1] - bounding_box[1][1]),
 		random_lat_lng = L.latLng(random_lat, random_lng);
-
 		agent.scheduleTrip(random_lat_lng, {type: "unanchored"}, 1);
 */
 		//Find and move to a random street's intersection.
@@ -73,7 +93,7 @@ function setup() {
 		cross_streets = Object.keys(random_street.intersections),
 		intersection = random_street.intersections[cross_streets[0]][0][0];
 
-		agent.scheduleTrip(intersection, {type: "street", id: street_id}, 2);
+		agent.scheduleTrip(intersection, {type: "street", id: street_id}, 1.5);
 
 		//Find and move to a random unit door on the same street...
 		var street_units = agentmap.units.getLayers().filter(function(unit) {
@@ -87,7 +107,7 @@ function setup() {
 			new_unit_id = new_random_unit._leaflet_id,
 			new_unit_door = agentmap.getUnitDoor(new_unit_id);
 
-			agent.scheduleTrip(new_unit_door, {type: "unit", id: new_unit_id}, .5);
+			agent.scheduleTrip(new_unit_door, {type: "unit", id: new_unit_id}, 1.5);
 
 			//Also, move to the door of one of that unit's nextdoor neighbors, if it has any.
 
@@ -105,6 +125,31 @@ function setup() {
 		};
 	});
 
-	agentmap.downloadStreets
-	agentmap.downloadUnits
+//	agentmap.downloadStreets
+//	agentmap.downloadUnits()
+}
+
+//Given an array, return n random elements from it.
+function pick_random_n(array, n) {
+	if (array.length < n) {
+		throw new Error("n cannot be bigger than the number of elements in the array!");
+	}
+
+	var random_indices = [];
+
+	for (var i = 0; i < n; i++) {
+		var random_index = Math.floor(Math.random() * array.length);
+		if (!random_indices.includes(random_index)) {
+			random_indices.push(random_index);
+		}
+		else {
+			i--;
+		}
+	}
+
+	var random_n = random_indices.map(function(index) {
+		return array[index];
+	});
+
+	return random_n;
 }
