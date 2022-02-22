@@ -13,7 +13,7 @@
 </head>
 <body>
 <br />
-<h2>Simple: An AgentMaps Simulation</h2>
+<h2>Simulation</h2>
 <br />
 <div id="main">
 <div id="map"></div>
@@ -24,16 +24,20 @@
 <div class="datum">Ticks: <div class="datum_value" id="tick_value"></div></div>
 </div>
 <div id="options">
+<div class="datum option">Agent Speed:<br/><input type="range" min=".2" max="10" step=".2" value="1" class="slider" id="speed_controller">
+</input></div>
 <div class="datum option">Animation Quality:<br/><input type="range" min="1" max="5" value="5" class="slider" id="animation_interval"><i>higher = smoother but slower</i></div>
+<div class="datum option">test:<br/><input type="range" min="0" max=".006" step=".00001" value=".00001" class="slider" id="infection_probability">
+</input></div>
 </div>
 </div>
 </div>
 <script type="text/javascript" src="interface.js"></script>
 <script type="text/javascript" src="map_data.js"></script>
 <script type="text/javascript" src="street_features.js"></script>
-<script type="text/javascript" src="unit_features.js"></script>
+<script type="text/javascript" src="units_features.js"></script>
 <script type="text/javascript" src="agentmaps.js"></script>
-<script type="text/javascript" src="simple.js"></script>
+<script type="text/javascript" src="simple_new_vers.js"></script>
 <script>
 </script>
 </body>
